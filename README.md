@@ -20,6 +20,7 @@ https://terrabyte.acs.uwinnipeg.ca/assets/programs/client_app.zip
 Instructions: 
 Download and unpack the zip to a folder of your choice. 
 Find and execute the file "client_app.exe". 
+Some users experienced issues with the program when not executing it as admin.
 
 Remember, that you will have to login with your user-credentials provided by an admin, before you can do anything. Subsequent usage does not require to login again. 
 
