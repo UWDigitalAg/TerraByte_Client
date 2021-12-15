@@ -4,8 +4,14 @@
 ## The TerraByte Project
 https://terrabyte.acs.uwinnipeg.ca/index.html
 
-## Video Introduction
+## Tutorials/Manuals
+Video Tutorial:
+
 https://youtu.be/2MX4ascCTq0
+
+Written Manual and Parameter Explanation: 
+
+https://terrabyte.acs.uwinnipeg.ca/assets/programs/TB_Client_Manual.pdf
 
 ## Installation
 ### Executable (Windows only)
