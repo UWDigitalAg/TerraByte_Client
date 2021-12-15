@@ -350,23 +350,42 @@ class Main(wx.Frame):
         label_author = wx.StaticText(
             self.info_tab,
             wx.ID_ANY,
-            "The TerraByte Client is developed by Michael Beck. Contact: m.beck@uwinnipeg.ca"
+            "The TerraByte Client is developed by Michael Beck. "
+            "Contact: m.beck@uwinnipeg.ca"
         )
         sizer_8.Add(label_author, 0, 0, 0)
 
         self.hyperlink_citation_info = wx.adv.HyperlinkCtrl(
             self.info_tab,
             wx.ID_ANY,
-            "Citation Information and Terms of use", "https://terrabyte.acs.uwinnipeg.ca/resources.html#tools"
+            "Citation Information and Terms of use",
+            "https://terrabyte.acs.uwinnipeg.ca/resources.html#tools"
         )
         sizer_8.Add(self.hyperlink_citation_info, 0, 0, 0)
 
         self.hyperlink_parameter_explanation = wx.adv.HyperlinkCtrl(
             self.info_tab,
             wx.ID_ANY,
-            "Manual", "https://terrabyte.acs.uwinnipeg.ca/resources.html#tools"
+            "Manual",
+            "https://terrabyte.acs.uwinnipeg.ca/resources.html#tools"
         )
         sizer_8.Add(self.hyperlink_parameter_explanation, 0, 0, 0)
+
+        self.video_tutorial = wx.adv.HyperlinkCtrl(
+            self.info_tab,
+            wx.ID_ANY,
+            "GitHub",
+            "https://youtu.be/2MX4ascCTq0"
+        )
+        sizer_8.Add(self.video_tutorial, 0, 0, 0)
+
+        self.github = wx.adv.HyperlinkCtrl(
+            self.info_tab,
+            wx.ID_ANY,
+            "GitHub",
+            "https://github.com/UWDigitalAg/TerraByte_Client"
+        )
+        sizer_8.Add(self.github, 0, 0, 0)
 
         self.info_tab.SetSizer(sizer_8)
 
