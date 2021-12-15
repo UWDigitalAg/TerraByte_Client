@@ -4,8 +4,14 @@
 ## The TerraByte Project
 https://terrabyte.acs.uwinnipeg.ca/index.html
 
-## Video Introduction
+## Tutorials/Manuals
+Video Tutorial:
+
 https://youtu.be/2MX4ascCTq0
+
+Written Manual and Parameter Explanation: 
+
+https://terrabyte.acs.uwinnipeg.ca/assets/programs/TB_Client_Manual.pdf
 
 ## Installation
 ### Executable (Windows only)
@@ -14,6 +20,7 @@ https://terrabyte.acs.uwinnipeg.ca/assets/programs/client_app.zip
 Instructions: 
 Download and unpack the zip to a folder of your choice. 
 Find and execute the file "client_app.exe". 
+Some users experienced issues with the program when not executing it as admin.
 
 Remember, that you will have to login with your user-credentials provided by an admin, before you can do anything. Subsequent usage does not require to login again. 
 
