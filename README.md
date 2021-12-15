@@ -4,6 +4,9 @@
 ## The TerraByte Project
 https://terrabyte.acs.uwinnipeg.ca/index.html
 
+## Video Introduction
+https://youtu.be/2MX4ascCTq0
+
 ## Installation
 ### Executable (Windows only)
 https://terrabyte.acs.uwinnipeg.ca/assets/programs/client_app.zip
@@ -24,6 +27,3 @@ Dependencies:
 * pandas: https://pandas.pydata.org/
 * requests: https://docs.python-requests.org/en/latest/
 * certifi: https://pypi.org/project/certifi/
- 
-## Video Introduction
-https://youtu.be/2MX4ascCTq0
