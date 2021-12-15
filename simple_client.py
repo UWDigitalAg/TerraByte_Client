@@ -210,40 +210,6 @@ async def get_files(part_number: int, job_id: str, target_folder):
     return False, time_slept
 
 
-# Deprecated
-'''
-async def get_multiple_files(file_list, target):
-    logger.info(f"Preparing download of multiple files...")
-    conn = aiohttp.TCPConnector(limit=64)
-    async with aiohttp.ClientSession(connector=conn) as session:
-        tasks = []
-        for file in file_list:
-            task = asyncio.ensure_future(direct_download(session, file, target))
-            tasks.append(task)
-        results = await asyncio.gather(*tasks, return_exceptions=True)
-
-        failed_tasks = 0
-
-        for i, result in enumerate(results, 1):
-            if isinstance(result, Exception):
-                logger.warning("Task %d failed: %s" % (i, str(result)))
-                failed_tasks += 1
-            else:
-                logger.debug("Task %d succeeded:" % i)
-                logger.debug(f"Result: {result}")
-        return failed_tasks
-
-
-async def direct_download(session, filename, target):
-    req_data = {
-        "filepath": filename
-    }
-    logger.debug(f"Direct download request: data {req_data}, url {API_URL}download")
-    async with session.post(API_URL + "download", data=req_data, ssl=False) as response:
-        with open(target + "\\" + filename.split("/")[-1], "wb") as f:
-            async for chunk in response.content.iter_chunked(DL_CHUNK_SIZE):
-                f.write(chunk)'''
-
 if __name__ == '__main__':
     # Login
     data = send_req(
