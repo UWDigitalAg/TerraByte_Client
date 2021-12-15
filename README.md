@@ -6,6 +6,7 @@ https://terrabyte.acs.uwinnipeg.ca/index.html
 
 ## Executable (Windows only)
 https://terrabyte.acs.uwinnipeg.ca/assets/programs/client_app.py
+
 Instructions: 
 Download and unpack the zip to a folder of your choice. 
 Find and execute the file "client_app.exe". 
