@@ -27,3 +27,24 @@ Dependencies:
 * pandas: https://pandas.pydata.org/
 * requests: https://docs.python-requests.org/en/latest/
 * certifi: https://pypi.org/project/certifi/
+
+## Citation/Giving Credit
+If you enjoy the data downloaded by the TerraByte Client and/or use our data for your research give credit by citing: 
+
+https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0243923
+
+```
+@article{10.1371/journal.pone.0243923,
+    doi = {10.1371/journal.pone.0243923},
+    author = {Beck, Michael A. AND Liu, Chen-Yi AND Bidinosti, Christopher P. AND Henry, Christopher J. AND Godee, Cara M. AND Ajmani, Manisha},
+    journal = {PLOS ONE},
+    publisher = {Public Library of Science},
+    title = {An embedded system for the automated generation of labeled plant images to enable machine learning applications in agriculture},
+    year = {2020},
+    month = {12},
+    volume = {15},
+    url = {https://doi.org/10.1371/journal.pone.0243923},
+    pages = {1-23},
+    number = {12},
+}
+```
