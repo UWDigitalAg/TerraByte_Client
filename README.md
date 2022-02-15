@@ -35,6 +35,9 @@ Dependencies:
 * requests: https://docs.python-requests.org/en/latest/
 * certifi: https://pypi.org/project/certifi/
 
+## License
+The license under which this program and the data that can be downloaded through this program operates can be found at ```license.txt```
+
 ## Citation/Giving Credit
 If you enjoy the data downloaded by the TerraByte Client and/or use our data for your research give credit by citing: 
 

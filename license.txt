@@ -1,0 +1,19 @@
+License
+This data is made available under the CC BY 4.0 license 
+(https://creativecommons.org/licenses/by/4.0/). 
+
+Please do not give our data (whole or in part) to others directly. 
+We ask that you refer them to the portal to download the data. 
+
+Portal link: https://terrabyte.acs.uwinnipeg.ca/resources.html#tools 
+
+The data is offered "as is" and in the context of researching its possibilities. 
+We spend a continuous effort on to provide the data that is as good as possible. 
+You can encounter images in the dataset that are bugged, for example, 
+seeing fragments of other plants sticking into the frame. 
+
+Please cite the following paper for any publications or presentations based on our data.
+Beck MA, Liu CY, Bidinosti CP, Henry CJ, Godee CM, et al. (2020) 
+An embedded system for the automated generation of labeled plant 
+images to enable machine learning applications in agriculture. 
+PLOS ONE 15(12): e0243923. https://doi.org/10.1371/journal.pone.0243923

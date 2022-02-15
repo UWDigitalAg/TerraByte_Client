@@ -10,6 +10,8 @@ import logging
 import traceback
 import asyncio
 from pandas import json_normalize
+from dataclasses import dataclass, field
+from typing import List
 
 from client.simple_client import API_URL, USER_URL, get_files, send_req, \
     prezipped_download
@@ -201,15 +203,17 @@ def update_archives_cmd(**kwargs):
 
 
 # Helper Class Download-Thread
+@dataclass(eq=False)
 class DownloadThread(threading.Thread):
-    def __init__(self, part_numbers, job_id, directory):
+    part_numbers: List[int] = field(default_factory=list)
+    job_id: str = ""
+    directory: str = ""
+
+    def __post_init__(self):
         threading.Thread.__init__(self)
         self.logger = logging.getLogger("Client.DLThread")
         self.logger.setLevel(logging.DEBUG)
 
-        self.part_numbers = part_numbers
-        self.job_id = job_id
-        self.directory = directory
         self.start()
         self.total_wait_time_on_server = 0.0
 

@@ -27,7 +27,7 @@ else:
 
 VERSION = "1.0.0"
 
-SAMPLE_SIZE = 10
+SAMPLE_SIZE = 20
 
 JSON_LOCATION = os.path.join(Current_Path, "parameters.json")
 METADATA_LOCATION = os.path.join(Current_Path, "metadata.json")
@@ -36,6 +36,13 @@ METADATA_LOCATION = os.path.join(Current_Path, "metadata.json")
 class Main(wx.Frame):
     def __init__(self, *args, **kwds):
 
+        # Confirm License
+        license_dialog = LicenseDialog(None, wx.ID_ANY, "")
+        if license_dialog.ShowModal() != wx.ID_OK:
+            self.logger.warning("License was not agreed on.")
+            license_dialog.Destroy()
+            return None
+        license_dialog.Destroy()
         with open(METADATA_LOCATION, "r") as f:
             metadata = json.load(f)
 
@@ -633,12 +640,68 @@ class Main(wx.Frame):
     # end of class Main
 
 
+class LicenseDialog(wx.Dialog):
+    def __init__(self, *args, **kwds):
+        # begin wxGlade: MyDialog.__init__
+        kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_DIALOG_STYLE
+        wx.Dialog.__init__(self, *args, **kwds)
+        self.SetTitle("License Agreement")
+
+        sizer_1 = wx.BoxSizer(wx.VERTICAL)
+
+        with open("license.txt", "r") as f:
+            lines = f.read()
+        label_1 = wx.StaticText(self, wx.ID_ANY, lines)
+        sizer_1.Add(label_1, 0, wx.LEFT | wx.RIGHT, 10)
+
+        self.agree_box = wx.CheckBox(self, wx.ID_ANY, "I agree to the above license and terms of usage.")
+        sizer_1.Add(self.agree_box, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALL, 10)
+
+        sizer_2 = wx.StdDialogButtonSizer()
+        sizer_1.Add(sizer_2, 0, wx.ALIGN_RIGHT | wx.ALL, 4)
+
+        self.button_OK = wx.Button(self, wx.ID_OK, "")
+        self.button_OK.Enable(False)
+        self.button_OK.SetDefault()
+        self.agreed = False
+        sizer_2.AddButton(self.button_OK)
+
+        self.button_CANCEL = wx.Button(self, wx.ID_CANCEL, "")
+        sizer_2.AddButton(self.button_CANCEL)
+
+        sizer_2.Realize()
+
+        self.SetSizer(sizer_1)
+        sizer_1.Fit(self)
+
+        self.SetAffirmativeId(self.button_OK.GetId())
+        self.SetEscapeId(self.button_CANCEL.GetId())
+
+        self.Layout()
+
+        self.Bind(wx.EVT_CHECKBOX, self.enable_ok, self.agree_box)
+        # end wxGlade
+
+    def enable_ok(self, event):  # wxGlade: MyDialog.<event_handler>
+        self.agreed = not self.agreed
+        self.button_OK.Enable(self.agreed)
+        event.Skip()
+
+# end of class MyDialog
+
+
 # noinspection PyAttributeOutsideInit
 class TerraByteClient(wx.App):
     def OnInit(self):
         self.frame = Main(None, wx.ID_ANY, "")
-        self.SetTopWindow(self.frame)
+        try:
+            self.SetTopWindow(self.frame)
+        except RuntimeError:
+            print("License must be agreed to")
+            return True
+
         self.frame.Show()
+
         return True
 
 # end of class TerraByteClient
