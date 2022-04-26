@@ -15,7 +15,7 @@ https://terrabyte.acs.uwinnipeg.ca/assets/programs/TB_Client_Manual.pdf
 
 ## Installation
 ### Executable (Windows only)
-https://terrabyte.acs.uwinnipeg.ca/assets/programs/client_app.zip
+https://terrabyte.acs.uwinnipeg.ca/assets/programs/TerraByte_Portal.zip
 
 Instructions: 
 Download and unpack the zip to a folder of your choice. 
