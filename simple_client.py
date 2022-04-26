@@ -7,6 +7,7 @@ Created on Fri Apr  3 20:56:24 2020
 
 # Core
 import logging
+from logging.handlers import RotatingFileHandler
 import time
 import traceback
 import shutil
@@ -29,7 +30,8 @@ logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter(
     '%(asctime)s  %(levelname)s [%(name)s]: %(message)s'
 )
-filehandler = logging.FileHandler(os.path.join(Current_Path, 'client.log'))
+filehandler = RotatingFileHandler(os.path.join(Current_Path, 'client.log'),
+                                  maxBytes=1024**2, backupCount=4)
 filehandler.setLevel(logging.DEBUG)
 filehandler.setFormatter(formatter)
 logger.addHandler(filehandler)
@@ -257,6 +259,7 @@ if __name__ == '__main__':
                     'eagli_parameters.bounding_box_output': False,
                     'eagli_parameters.json_output': False,
                     'eagli_parameters.archive_selection': '',
+                    'eagli_parameters.perspectives': '',
                     'eagli_parameters.custom_query_string': '',
                     'field_parameters.start_date': start_date,
                     'field_parameters.end_date': end_date,

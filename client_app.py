@@ -25,7 +25,7 @@ else:
     Current_Path = str(os.path.dirname(__file__))
 
 
-VERSION = "1.0.0"
+VERSION = "1.0.1"
 
 SAMPLE_SIZE = 20
 
@@ -44,7 +44,7 @@ class Main(wx.Frame):
             return None
         license_dialog.Destroy()
         with open(METADATA_LOCATION, "r") as f:
-            metadata = json.load(f)
+            metadata = json.load(f) # TODO: Have a way of getting this from the server instead
 
         # Setup logger
         self.logger = logging.getLogger("Client.Main")
@@ -53,7 +53,7 @@ class Main(wx.Frame):
         # Setup Frame
         kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
-        self.SetSize((555, 479))
+        self.SetSize((555, 539))
         self.SetTitle("TerraByte Client")
 
         self.tabs = wx.Notebook(self, wx.ID_ANY)
@@ -131,6 +131,11 @@ class Main(wx.Frame):
         )
         sizer_6.Add(label_resolution_maximum, 0, wx.TOP, 5)
 
+        label_perspective = wx.StaticText(
+            self.eaglidata_tab, wx.ID_ANY, "Perspective:"
+        )
+        sizer_6.Add(label_perspective, 0, wx.TOP, 20)
+
         sizer_7 = wx.BoxSizer(wx.VERTICAL)
         grid_sizer_2.Add(sizer_7, 1, wx.EXPAND, 0)
 
@@ -146,6 +151,23 @@ class Main(wx.Frame):
             self.eaglidata_tab, wx.ID_ANY, "4000", min=0, max=4000
         )
         sizer_7.Add(self.spin_resolution_max, 0, wx.EXPAND, 0)
+
+        self.perspective_box = wx.RadioBox(
+            self.eaglidata_tab,
+            wx.ID_ANY,
+            choices=["Any", "Top-down", "Oblique", "Profile"],
+            style=wx.LB_ALWAYS_SB | wx.LB_EXTENDED | wx.LB_SORT,
+            majorDimension=1
+        )
+
+        '''self.perspective_box = wx.CheckListBox(
+            self.eaglidata_tab,
+            wx.ID_ANY,
+            choices=["Top-down", "Oblique", "Profile"],
+            style=wx.LB_ALWAYS_SB | wx.LB_EXTENDED | wx.LB_SORT
+        )'''
+        self.perspective_box.SetMinSize((113, 110))
+        sizer_7.Add(self.perspective_box, 0, wx.EXPAND, 0)
 
         static_line_1 = wx.StaticLine(self.eaglidata_tab, wx.ID_ANY)
         sizer_1.Add(static_line_1, 0, wx.BOTTOM | wx.EXPAND | wx.TOP, 8)
@@ -374,14 +396,14 @@ class Main(wx.Frame):
             self.info_tab,
             wx.ID_ANY,
             "Manual",
-            "https://terrabyte.acs.uwinnipeg.ca/resources.html#tools"
+            "https://terrabyte.acs.uwinnipeg.ca/assets/programs/TB_Client_Manual.pdf"
         )
         sizer_8.Add(self.hyperlink_parameter_explanation, 0, 0, 0)
 
         self.video_tutorial = wx.adv.HyperlinkCtrl(
             self.info_tab,
             wx.ID_ANY,
-            "GitHub",
+            "Video Explanation",
             "https://youtu.be/2MX4ascCTq0"
         )
         sizer_8.Add(self.video_tutorial, 0, 0, 0)
@@ -561,6 +583,7 @@ class Main(wx.Frame):
             "bounding_box_output": self.checkbox_bounding_box_images.GetValue(),
             "json_output": self.checkbox_json_files.GetValue(),
             "archive_selection": self.combo_box_archived_queries.GetValue(),
+            "perspectives": self.perspective_box.GetStringSelection(),
         }
         self.field_query_parameters = {
             "start_date": self._wxdate2pydate(self.datepicker_start_date_field.GetValue()),
