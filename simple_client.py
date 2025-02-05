@@ -44,10 +44,11 @@ logger.info("Logging started")
 logging.captureWarnings(True)
 
 # Portal endpoint
-API_URL = "https://206.12.94.200:3000/api/"
-USER_URL = "https://206.12.94.200:3000/user/"
-# CERT = "../cert.pem"
-CERT = os.path.join(Current_Path, "cert.pem")
+domain = "206-12-94-200.cloud.computecanada.ca"
+
+API_URL = f"https://{domain}:3000/api/"
+USER_URL = f"https://{domain}:3000/user/"
+
 
 # Setup query-delay parameters
 BACK_OFF_TIME = 1.0
@@ -59,19 +60,15 @@ DL_CHUNK_SIZE = 4096
 # Create session
 s = requests.Session()
 
-# Get cert (only needed once)
 try:
     logger.info('Checking connection to Portal...')
+    logger.info(f"API_URL: {API_URL}")
+    print(f"API_URL: {API_URL}")
     test = requests.get(API_URL)
     logger.info('Connection to Portal OK.')
 except requests.exceptions.SSLError as err:
-    logger.info('SSL Error. Adding custom certs to Certifi store...')
-    ca_file = certifi.where()
-    with open('cert.pem', 'rb') as infile:
-        custom_ca = infile.read()
-    with open(ca_file, 'ab') as outfile:
-        outfile.write(custom_ca)
-    logger.info('Certs added.')
+    logger.error(err)
+    print(err)
 
 
 def send_req(method="", endpoint="", url="", req_data=None, parameters=None, raw=False):
@@ -99,8 +96,7 @@ def send_req(method="", endpoint="", url="", req_data=None, parameters=None, raw
     response = method_using(
         url=endpoint+url,
         data=req_data,
-        params=parameters,
-        verify=CERT
+        params=parameters
     )
     if raw:
         return response
@@ -120,7 +116,7 @@ async def prezipped_download(parts, archive_name, download_dir=None):
             req_data = {
                 "filepath": target
             }
-            r = s.post(url=API_URL + "download_archive", data=req_data, verify=CERT)
+            r = s.post(url=API_URL + "download_archive", data=req_data)
             with open(f"{download_dir}\\{part_number}.tar", "wb") as f:
                 for chunk in r.iter_content(chunk_size=DL_CHUNK_SIZE):
                     f.write(chunk)
@@ -219,8 +215,8 @@ if __name__ == '__main__':
         endpoint=USER_URL,
         url="login",
         req_data={
-            "username": "",
-            "password": ""
+            "username": "mbeck",
+            "password": "T3RR4BYT3!P0RT4L"
         },
         parameters=None
     )
@@ -232,6 +228,9 @@ if __name__ == '__main__':
     for year in [2020, 2021]:
         for month in range(1, 13):
             month_row.append(str(year)+"/"+str(month))
+    for year in [2022]:
+        for month in range(1, 9):
+            month_row.append(str(year)+"/"+str(month))
     df = pd.DataFrame({"Month": month_row})
 
     import json
@@ -242,15 +241,15 @@ if __name__ == '__main__':
         plant_row = []
         for year in [2020, 2021]:
             for month in range(1, 12):
-                start_date = datetime.datetime(year, month, 1)
-                end_date = datetime.datetime(year, month+1, 1)
+                start_date = datetime.datetime(year, month, 1, 0, 0, 0)
+                end_date = datetime.datetime(year, month+1, 1, 0, 0, 0)
 
                 req_data = {
                     'eagli_parameters.start_date': start_date,
                     'eagli_parameters.end_date': end_date,
                     'eagli_parameters.min_age': 0,
                     'eagli_parameters.max_age': 1000,
-                    'eagli_parameters.plants': [plant],
+                    'eagli_parameters.plants': plant,
                     'eagli_parameters.plant_id': '',
                     'eagli_parameters.min_res': 0,
                     'eagli_parameters.max_res': 4000,
@@ -259,7 +258,7 @@ if __name__ == '__main__':
                     'eagli_parameters.bounding_box_output': False,
                     'eagli_parameters.json_output': False,
                     'eagli_parameters.archive_selection': '',
-                    'eagli_parameters.perspectives': '',
+                    'eagli_parameters.perspectives': 'Any',
                     'eagli_parameters.custom_query_string': '',
                     'field_parameters.start_date': start_date,
                     'field_parameters.end_date': end_date,
@@ -267,7 +266,7 @@ if __name__ == '__main__':
                     'field_parameters.archive_selection': '',
                     'field_parameters.custom_query_string': '',
                     'dataset': 'combined_images',
-                    'sample_size': 10
+                    'sample_size': 20
                 }
                 data = send_req(
                     method="POST",
@@ -277,10 +276,14 @@ if __name__ == '__main__':
                     parameters=None
                 )
                 # Process response data
-                if "error" not in data.keys():
-                    plant_row.append(data["number_files"])
-                else:
+                print("returned data is: ", data["message"])
+                if "error" in data.keys():
                     plant_row.append(data["error"])
+                elif "message" in data.keys() and data["message"] == "This query yielded no results.":
+                    plant_row.append(0)
+                else:
+                    plant_row.append(data["number_files"])
+
                 # Return response data and gui-formatted response
             # December
             start_date = datetime.datetime(year, 12, 1)
@@ -291,7 +294,7 @@ if __name__ == '__main__':
                 'eagli_parameters.end_date': end_date,
                 'eagli_parameters.min_age': 0,
                 'eagli_parameters.max_age': 1000,
-                'eagli_parameters.plants': [plant],
+                'eagli_parameters.plants': plant,
                 'eagli_parameters.plant_id': '',
                 'eagli_parameters.min_res': 0,
                 'eagli_parameters.max_res': 4000,
@@ -300,6 +303,7 @@ if __name__ == '__main__':
                 'eagli_parameters.bounding_box_output': False,
                 'eagli_parameters.json_output': False,
                 'eagli_parameters.archive_selection': '',
+                'eagli_parameters.perspectives': 'Any',
                 'eagli_parameters.custom_query_string': '',
                 'field_parameters.start_date': start_date,
                 'field_parameters.end_date': end_date,
@@ -307,7 +311,7 @@ if __name__ == '__main__':
                 'field_parameters.archive_selection': '',
                 'field_parameters.custom_query_string': '',
                 'dataset': 'combined_images',
-                'sample_size': 10
+                'sample_size': 20
             }
             data = send_req(
                 method="POST",
@@ -317,10 +321,58 @@ if __name__ == '__main__':
                 parameters=None
             )
             # Process response data
-            if "error" not in data.keys():
-                plant_row.append(data["number_files"])
-            else:
+            print("returned data is: ", data["message"])
+            if "error" in data.keys():
                 plant_row.append(data["error"])
+            elif "message" in data.keys() and data["message"] == "This query yielded no results.":
+                plant_row.append(0)
+            else:
+                plant_row.append(data["number_files"])
+        for year in [2022]:
+            for month in range(1, 9):
+                start_date = datetime.datetime(year, month, 1, 0, 0, 0)
+                end_date = datetime.datetime(year, month+1, 1, 0, 0, 0)
+
+                req_data = {
+                    'eagli_parameters.start_date': start_date,
+                    'eagli_parameters.end_date': end_date,
+                    'eagli_parameters.min_age': 0,
+                    'eagli_parameters.max_age': 1000,
+                    'eagli_parameters.plants': plant,
+                    'eagli_parameters.plant_id': '',
+                    'eagli_parameters.min_res': 0,
+                    'eagli_parameters.max_res': 4000,
+                    'eagli_parameters.single_plant_output': True,
+                    'eagli_parameters.multiple_plant_output': False,
+                    'eagli_parameters.bounding_box_output': False,
+                    'eagli_parameters.json_output': False,
+                    'eagli_parameters.archive_selection': '',
+                    'eagli_parameters.perspectives': 'Any',
+                    'eagli_parameters.custom_query_string': '',
+                    'field_parameters.start_date': start_date,
+                    'field_parameters.end_date': end_date,
+                    'field_parameters.plants': '',
+                    'field_parameters.archive_selection': '',
+                    'field_parameters.custom_query_string': '',
+                    'dataset': 'combined_images',
+                    'sample_size': 20
+                }
+                data = send_req(
+                    method="POST",
+                    endpoint=API_URL,
+                    url="check",
+                    req_data=req_data,
+                    parameters=None
+                )
+                # Process response data
+                print("returned data is: ", data["message"])
+                if "error" in data.keys():
+                    plant_row.append(data["error"])
+                elif "message" in data.keys() and data["message"] == "This query yielded no results.":
+                    plant_row.append(0)
+                else:
+                    plant_row.append(data["number_files"])
+
         # Write row
         df[plant] = plant_row
 
