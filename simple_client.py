@@ -310,8 +310,90 @@ if __name__ == '__main__':
                     req_data=None,
                     parameters=parameters
                 )
+    
+    """Example 2: download a (random) sample of field data"""
+    """
+    # Prepare request:
+    import datetime
 
-    """ Example 2: In this example getting an overview of plants per months
+    start_date = datetime.datetime(2021, 7, 4, 0, 0, 0)
+    end_date = datetime.datetime(2021, 7, 5, 0, 0, 0)
+
+    req_data = {
+        'eagli_parameters.start_date': start_date,
+        'eagli_parameters.end_date': end_date,
+        'eagli_parameters.min_age': 0,
+        'eagli_parameters.max_age': 1000,
+        'eagli_parameters.plants': "FieldPea",
+        'eagli_parameters.plant_id': '',
+        'eagli_parameters.min_res': 0,
+        'eagli_parameters.max_res': 4000,
+        'eagli_parameters.single_plant_output': True,
+        'eagli_parameters.multiple_plant_output': False,
+        'eagli_parameters.bounding_box_output': False,
+        'eagli_parameters.json_output': False,
+        'eagli_parameters.archive_selection': '',
+        'eagli_parameters.perspectives': 'Any',
+        'eagli_parameters.custom_query_string': '',
+        'field_parameters.start_date': start_date,
+        'field_parameters.end_date': end_date,
+        'field_parameters.plants': 'Canola',
+        'field_parameters.archive_selection': '',
+        'field_parameters.custom_query_string': '',
+        'dataset': 'field_images',
+        'sample_size': 20
+    }
+    response = send_req(
+        method="POST",
+        endpoint=API_URL,
+        url="check",
+        req_data=req_data,
+        parameters=None
+    )
+    print(response["message"])
+
+    if data["message"] != "This query yielded no results.":
+        # Ask to prepare data
+        response = send_req(
+            method="POST",
+            endpoint=API_URL,
+            url="prepare",
+            req_data=req_data,
+            parameters=None
+        )
+
+        if "error" in response.keys():
+            print(response["error"])
+        else:
+            file_list = response["file_list"]
+            job_id = response["job_id"]
+            number_files = response["number_files"]
+            parts = response["parts"]
+
+            # Download each part into download directory
+            for part in range(int(parts)):
+                # Download part
+                asyncio.run(
+                    get_files(part, job_id, DOWNLOAD_DIR)
+                )
+                # Acknowledge download at server. Otherwise server will not
+                # continue to prepare new parts for you!
+                parameters = {
+                    "job_id": job_id,
+                    "part_number": part,
+                    "final_part": (part == parts - 1)
+                }
+                send_req(
+                    method="GET",
+                    endpoint=API_URL,
+                    url="ack_download",
+                    req_data=None,
+                    parameters=parameters
+                )   
+    """
+    
+    """ Example 3: In this example getting an overview of plants per months"""
+    """
         import datetime
         import pandas as pd
         month_row = []
