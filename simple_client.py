@@ -215,8 +215,8 @@ if __name__ == '__main__':
         endpoint=USER_URL,
         url="login",
         req_data={
-            "username": "mbeck",
-            "password": "T3RR4BYT3!P0RT4L"
+            "username": "",
+            "password": ""
         },
         parameters=None
     )
